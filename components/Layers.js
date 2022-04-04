@@ -29,7 +29,10 @@ const Layers = () => {
         <input accept="image/*" type="file" multiple onChange={onImageChange} />
       </div>
       <div className="flex flex-row flex-wrap">
-        
+          {images.map((item,i)=>(
+              <Image key={i} height={200} width={200} src={URL.createObjectURL(item)}/>
+          )
+          )}  
       </div>
     </div>
   );
