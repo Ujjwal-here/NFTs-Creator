@@ -45,6 +45,16 @@ const Layers = () => {
     }));
   }, []);
 
+  const handleClick = () => {
+    const newlayer = prompt("Enter Layer Name");
+    setLayers((prevCards) => update(prevCards, {
+      $splice: [
+          [prevCards.length, 0, {id:prevCards.length+1,text:newlayer}],
+      ],
+  }));
+
+    
+  };
 
   const renderCard = useCallback((card, index) => {
     return (<Card key={card.id} index={index} id={card.id} text={card.text} moveCard={moveCard}/>);
@@ -59,13 +69,18 @@ const Layers = () => {
     setImages(img);
   };
 
-  const handleClick = () => {
-    const newlayer = prompt("Enter Layer Name");
-    setlayers([...layers,newlayer])
-    console.log(layers);
-  };
-  return (<div>
-    <div className="w-1/4" >{layers.map((card, i) => renderCard(card, i))}</div>
+  return (<div className="flex flex-row justify-start">
+    <div>
+    <div className="w-96" >{layers.map((card, i) => renderCard(card, i))}</div>
+    <div className="text-lg bg-white">
+    <button onClick={handleClick} class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          Button
+    </button>
+    </div>
+    </div>
+    <div>
+      images
+    </div>
   </div>);
 };
 
