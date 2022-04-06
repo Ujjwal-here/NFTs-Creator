@@ -19,7 +19,7 @@ const Main = () => {
         <BsArrowRightCircle size={80} className="text-[#43F2AC] my-4 animate-pulse"/>
       </div>
       <div>
-        <Image src={block} className="bg-[#1C2025]" alt="" />
+        <Image src={block} className="bg-[#191C26]" alt="" />
       </div>
     </div>
   );
