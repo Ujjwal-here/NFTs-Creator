@@ -9,26 +9,36 @@ export let initialAppState = {
 export function layerReducer(state,action){
     switch (action.type) {
         case 'ADD_LAYER': {
-            const newState = update(state, {
+            let newState = update(state, {
                 edges:{
                 $splice: [
                   [state.edges.length, 0, { id: state.edges.length + 1, text: action.payload }],
                 ],
-                }
+                },
+                nodes:{
+                    $push: [{ id: state.edges.length + 1, text: action.payload, files:[] }]
+                },
               })
+            newState = layerReducer(newState,{type:'SELECT_LAYER',payload:state.edges.length + 1})
             return newState
         }
 
         case 'SELECT_LAYER':{
 
-            let newState = Object.assign({}, state, { selectedLayer:action.payload } );
-            console.log(newState,state)
-            console.log("is state same ",newState === state)
-            return newState
+            return {...state, selectedLayer:action.payload}
+        }
+
+        case 'ADD_FILES':{
+            let find = state.nodes.find((item) => item.id == action.payload.selectedLayer)
+            find.files.push({id:action.payload.id,name:action.payload.name,type:action.payload.type})
+
+            const newNodes = state.nodes.filter(item=> item.id != action.payload.selectedLayer)
+
+            return {edges:state.edges,nodes:[...newNodes,find],selectedLayer:state.selectedLayer}
+
         }
         
         default:
-            console.log("default")
             return state
         
         
