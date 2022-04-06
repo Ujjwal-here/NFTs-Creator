@@ -5,7 +5,7 @@ import {BsArrowRightCircle} from 'react-icons/bs'
 
 const Main = () => {
   return (
-    <div className="flex flex-row items-stretch  px-40 py-28">
+    <div className="flex flex-row items-stretch  px-32 py-32 ">
       <div className="flex-1 flex-col px-16">
         <p className="text-white font-bold text-7xl">NFTs Creator</p>
         <p className="text-[#43F2AC] font-bold text-5xl py-2">
