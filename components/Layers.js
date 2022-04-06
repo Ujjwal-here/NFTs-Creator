@@ -22,14 +22,16 @@ const Layers = () => {
   const [appState, dispatch] = useReducer(layerReducer,initialAppState)
 
   const moveCard = useCallback((dragIndex, hoverIndex) => {
-    setLayers((prevCards) =>
-      update(prevCards, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, prevCards[dragIndex]],
-        ],
-      })
-    );
+
+    dispatch({type:'MOVE_LAYER',payload:{dragIndex:dragIndex,hoverIndex:hoverIndex}})
+    // setLayers((prevCards) =>
+    //   update(prevCards, {
+    //     $splice: [
+    //       [dragIndex, 1],
+    //       [hoverIndex, 0, prevCards[dragIndex]],
+    //     ],
+    //   })
+    // );
   }, []);
 
   const handleClick = useCallback(() => {

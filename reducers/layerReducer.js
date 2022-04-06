@@ -8,8 +8,23 @@ export let initialAppState = {
 
 export function layerReducer(state,action){
     switch (action.type) {
+
+        case 'MOVE_LAYER':{
+            const newState = update(state, {
+                
+                edges:{
+                    $splice: [
+                        [action.payload.dragIndex, 1],
+                        [action.payload.hoverIndex, 0, state.edges[action.payload.dragIndex]],
+                      ],
+                }
+                
+              })
+            return newState
+        }
+
         case 'ADD_LAYER': {
-            let newState = update(state, {
+            const newState = update(state, {
                 edges:{
                 $splice: [
                   [state.edges.length, 0, { id: state.edges.length + 1, text: action.payload }],
