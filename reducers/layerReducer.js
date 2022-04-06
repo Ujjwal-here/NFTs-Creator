@@ -18,8 +18,10 @@ export function layerReducer(state,action){
                 nodes:{
                     $push: [{ id: state.edges.length + 1, text: action.payload, files:[] }]
                 },
+                selectedLayer:{
+                    $set: state.edges.length + 1
+                }
               })
-            newState = layerReducer(newState,{type:'SELECT_LAYER',payload:state.edges.length + 1})
             return newState
         }
 
