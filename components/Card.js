@@ -44,7 +44,7 @@ export const Card = ({ id, text, index, moveCard }) => {
     });
     const opacity = isDragging ? 0 : 1;
     drag(drop(ref));
-    return (<div ref={ref} className={`p-2 m-2 text-center bg-white border-2 border-gray-500 ${opacity?"opacity-100":"opacity-0"}`} data-handler-id={handlerId}>
+    return (<div ref={ref} className={`text-md my-5 px-2 py-5 text-center cursor-pointer rounded bg-gradient-to-r from-[#1F2628] to-[#313538] text-white ${opacity?"opacity-100":"opacity-0"}`} data-handler-id={handlerId}>
 			{text}
 		</div>);
 };
