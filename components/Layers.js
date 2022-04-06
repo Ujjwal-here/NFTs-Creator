@@ -6,15 +6,18 @@ import update from "immutability-helper";
 import { Card } from "./Card";
 import {useDropzone} from 'react-dropzone'
 import {layerReducer,initialAppState} from '../reducers/layerReducer'
+import Dexie from 'dexie'
+import { useUID, useUIDSeed } from 'react-uid';
 
 const Layers = () => {
-  const [images, setImages] = useState([])
-  
-  const onDrop = useCallback(acceptedFiles => {
-    console.log(acceptedFiles)
-  }, [])
 
-  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+  const db = new Dexie("Files")
+  db.version(1).stores({
+    files:"key, value"
+  })
+
+  const [images, setImages] = useState([])
+
 
   const [appState, dispatch] = useReducer(layerReducer,initialAppState)
 
@@ -50,14 +53,36 @@ const Layers = () => {
     );
   }, [appState]);
 
-  const onImageChange = (event) => {
-    let files = event.target.files;
-    let img = [];
-    for (var i = 0; i < files.length; i++) {
-      img.push(files[i]);
+
+  function generateUID() {
+    var firstPart = (Math.random() * 46656) | 0;
+    var secondPart = (Math.random() * 46656) | 0;
+    firstPart = ("000" + firstPart.toString(36)).slice(-3);
+    secondPart = ("000" + secondPart.toString(36)).slice(-3);
+    return firstPart + secondPart;
+}
+
+  const onDrop = useCallback(async (acceptedFiles) => {
+    try{
+
+      acceptedFiles.forEach( async element => {
+        let key = generateUID()
+        await db.files.add({
+          key,
+          element
+        })
+        dispatch({type:'ADD_FILES',payload:{id:key, name:element.name, type:element.type, selectedLayer:appState.selectedLayer}})
+      });
+
     }
-    setImages(img);
-  };
+    catch (err){
+      console.log("database err", err)
+    }
+  },[appState])
+
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+  console.log(appState)
   
   return (
     <div className="flex flex-row px-40 py-6 ">
