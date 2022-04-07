@@ -96,8 +96,7 @@ const Layers = () => {
 
         <div {...getRootProps()} className="text-md my-9 px-2 py-7 text-center cursor-pointer rounded bg-[#131B22] text-white ">
           Upload or drag & drop images here
-          <div className="font-thin text-sm text-[#cbd5e1]">(image/png, image/gif, video/mp4, Max size: 10MB)
-          </div>
+          <div className="font-thin text-sm bg-[#131B22]   text-[#cbd5e1]">(image/png, image/gif, video/mp4, Max size: 10MB)</div>
         </div>
         
         
