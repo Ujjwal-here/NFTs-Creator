@@ -49,7 +49,7 @@ export function layerReducer(state,action){
 
         case 'ADD_FILES':{
             let find = state.nodes.find((item) => item.id == action.payload.selectedLayer)
-            find.files.push({id:action.payload.id,name:action.payload.name,type:action.payload.type})
+            find.files.push({id:action.payload.id,name:action.payload.name,type:action.payload.type,imgUrl:action.payload.imgUrl})
 
             const newNodes = state.nodes.filter(item=> item.id != action.payload.selectedLayer)
 

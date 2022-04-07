@@ -13,7 +13,6 @@ const Layers = () => {
     files:"key, value"
   })
 
-
   const [appState, dispatch] = useReducer(layerReducer,initialAppState)
 
   const moveCard = useCallback((dragIndex, hoverIndex) => {
@@ -52,7 +51,9 @@ const Layers = () => {
           key,
           element
         })
-        dispatch({type:'ADD_FILES',payload:{id:key, name:element.name, type:element.type, selectedLayer:appState.selectedLayer}})
+        const file = await db.files.get(key)
+        const imgUrl = URL.createObjectURL(file.element)
+        dispatch({type:'ADD_FILES',payload:{id:key, name:element.name, type:element.type, selectedLayer:appState.selectedLayer,imgUrl:imgUrl}})
       });
 
     }
@@ -63,7 +64,7 @@ const Layers = () => {
 
   const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
 
-  console.log(appState)
+  console.log(appState.nodes.find(item=> item.id===appState.selectedLayer))
   
   return (
     <div className="flex flex-row px-40 py-6 ">
@@ -89,9 +90,13 @@ const Layers = () => {
           Background
         </div>
         <div>
-          {/* {appState.nodes.find(item=> item.id===appState.selectedLayer).files.map((itm)=>(
-            <Image src={URL.createObjectURL(itm)}></Image>
-          ))} */}
+          {
+            appState.nodes && (
+              appState.nodes.find(item=>item.id === appState.selectedLayer)?.files.map(itm=>(
+                <Image src={itm.imgUrl} width={100} height={100}></Image>
+              ))
+            )
+          }
         </div>
 
         <div {...getRootProps()} className="text-md my-9 px-2 py-7 text-center cursor-pointer rounded bg-[#131B22] text-white ">
