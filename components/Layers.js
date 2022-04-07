@@ -1,13 +1,10 @@
 import React, { useState, useCallback, useReducer } from "react";
-import { BsArrowUpCircle } from "react-icons/bs";
-import Image from "next/image";
-import block from "../public/block-chain.png";
-import update from "immutability-helper";
 import { Card } from "./Card";
 import {useDropzone} from 'react-dropzone'
 import {layerReducer,initialAppState} from '../reducers/layerReducer'
 import Dexie from 'dexie'
-import { useUID, useUIDSeed } from 'react-uid';
+import { generateUID } from "../utils/generateUid";
+import Image from "next/image";
 
 const Layers = () => {
 
@@ -16,22 +13,12 @@ const Layers = () => {
     files:"key, value"
   })
 
-  const [images, setImages] = useState([])
-
 
   const [appState, dispatch] = useReducer(layerReducer,initialAppState)
 
   const moveCard = useCallback((dragIndex, hoverIndex) => {
 
     dispatch({type:'MOVE_LAYER',payload:{dragIndex:dragIndex,hoverIndex:hoverIndex}})
-    // setLayers((prevCards) =>
-    //   update(prevCards, {
-    //     $splice: [
-    //       [dragIndex, 1],
-    //       [hoverIndex, 0, prevCards[dragIndex]],
-    //     ],
-    //   })
-    // );
   }, []);
 
   const handleClick = useCallback(() => {
@@ -55,14 +42,6 @@ const Layers = () => {
     );
   }, [appState]);
 
-
-  function generateUID() {
-    var firstPart = (Math.random() * 46656) | 0;
-    var secondPart = (Math.random() * 46656) | 0;
-    firstPart = ("000" + firstPart.toString(36)).slice(-3);
-    secondPart = ("000" + secondPart.toString(36)).slice(-3);
-    return firstPart + secondPart;
-}
 
   const onDrop = useCallback(async (acceptedFiles) => {
     try{
@@ -108,6 +87,11 @@ const Layers = () => {
       <div className="pl-40 grow">
         <div className="text-lg my-9 px-2 py-5 text-center rounded bg-[#191C26] text-white ">
           Background
+        </div>
+        <div>
+          {/* {appState.nodes.find(item=> item.id===appState.selectedLayer).files.map((itm)=>(
+            <Image src={URL.createObjectURL(itm)}></Image>
+          ))} */}
         </div>
 
         <div {...getRootProps()} className="text-md my-9 px-2 py-7 text-center cursor-pointer rounded bg-[#131B22] text-white ">

@@ -20,6 +20,7 @@ export function layerReducer(state,action){
                 }
                 
               })
+              
             return newState
         }
 
@@ -37,6 +38,7 @@ export function layerReducer(state,action){
                     $set: state.edges.length + 1
                 }
               })
+              
             return newState
         }
 
