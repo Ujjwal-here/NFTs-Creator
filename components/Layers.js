@@ -1,85 +1,73 @@
-import React, { useState, useCallback } from "react";
-import { BsArrowUpCircle } from "react-icons/bs";
-import Image from "next/image";
-import block from "../public/block-chain.png";
-import update from "immutability-helper";
+import React, { useState, useCallback, useReducer } from "react";
 import { Card } from "./Card";
+import {useDropzone} from 'react-dropzone'
+import {layerReducer,initialAppState} from '../reducers/layerReducer'
+import Dexie from 'dexie'
+import { generateUID } from "../utils/generateUid";
+import Image from "next/image";
 
 const Layers = () => {
-  const [images, setImages] = useState([]);
 
-  const [layers, setLayers] = useState([
-    {
-      id: 1,
-      text: "Background",
-    },
-    {
-      id: 2,
-      text: "Face",
-    },
-    {
-      id: 3,
-      text: "Cloths",
-    },
-    {
-      id: 4,
-      text: "Tattoo",
-    },
-    {
-      id: 5,
-      text: "Weapon",
-    },
-    {
-      id: 6,
-      text: "Foreground",
-    },
-  ]);
+  const db = new Dexie("Files")
+  db.version(1).stores({
+    files:"key, value"
+  })
+
+  const [appState, dispatch] = useReducer(layerReducer,initialAppState)
 
   const moveCard = useCallback((dragIndex, hoverIndex) => {
-    setLayers((prevCards) =>
-      update(prevCards, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, prevCards[dragIndex]],
-        ],
-      })
-    );
+
+    dispatch({type:'MOVE_LAYER',payload:{dragIndex:dragIndex,hoverIndex:hoverIndex}})
   }, []);
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     const newlayer = prompt("Enter Layer Name");
-    setLayers((prevCards) =>
-      update(prevCards, {
-        $splice: [
-          [prevCards.length, 0, { id: prevCards.length + 1, text: newlayer }],
-        ],
-      })
-    );
-  };
+    if(newlayer){
+      dispatch({type:"ADD_LAYER", payload:newlayer})
+    }
+  },[])
 
   const renderCard = useCallback((card, index) => {
     return (
       <Card
+        dispatch={dispatch}
         key={card.id}
         index={index}
         id={card.id}
         text={card.text}
         moveCard={moveCard}
+        state={appState}
       />
     );
-  }, []);
+  }, [appState]);
 
-  const onImageChange = (event) => {
-    let files = event.target.files;
-    let img = [];
-    for (var i = 0; i < files.length; i++) {
-      img.push(files[i]);
+
+  const onDrop = useCallback(async (acceptedFiles) => {
+    try{
+
+      acceptedFiles.forEach( async element => {
+        let key = generateUID()
+        await db.files.add({
+          key,
+          element
+        })
+        const file = await db.files.get(key)
+        const imgUrl = URL.createObjectURL(file.element)
+        dispatch({type:'ADD_FILES',payload:{id:key, name:element.name, type:element.type, selectedLayer:appState.selectedLayer,imgUrl:imgUrl}})
+      });
+
     }
-    setImages(img);
-  };
+    catch (err){
+      console.log("database err", err)
+    }
+  },[appState])
 
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+  console.log(appState.nodes.find(item=> item.id===appState.selectedLayer))
+  
   return (
-    <div className="flex flex-row px-40 py-6  ">
+    <div className="flex flex-row px-40 py-6 ">
       <div>
         <div
           className="text-lg my-9 px-2 py-5 text-center rounded bg-[#191C26] text-white "
@@ -88,7 +76,7 @@ const Layers = () => {
           Layers
         </div>
         <div className="w-80">
-          {layers.map((card, i) => renderCard(card, i))}
+          {appState.edges.map((card, i) => renderCard(card, i))}
         </div>
         <div
           className="text-md my-5 px-2 py-5 text-center cursor-pointer rounded bg-[#21242E] text-white "
@@ -101,10 +89,22 @@ const Layers = () => {
         <div className="text-lg my-9 px-2 py-5 text-center rounded bg-[#191C26] text-white ">
           Background
         </div>
-        <div className="text-md my-9 px-2 py-7 text-center cursor-pointer rounded bg-[#131B22] text-white ">
+        <div>
+          {
+            appState.nodes && (
+              appState.nodes.find(item=>item.id === appState.selectedLayer)?.files.map(itm=>(
+                <Image src={itm.imgUrl} width={100} height={100}></Image>
+              ))
+            )
+          }
+        </div>
+
+        <div {...getRootProps()} className="text-md my-9 px-2 py-7 text-center cursor-pointer rounded bg-[#131B22] text-white ">
           Upload or drag & drop images here
           <div className="font-thin text-sm bg-[#131B22]   text-[#cbd5e1]">(image/png, image/gif, video/mp4, Max size: 10MB)</div>
         </div>
+        
+        
       </div>
     </div>
   );
