@@ -12,12 +12,15 @@
     "dexie": "^4.0.0-alpha.1",
     "immutability-helper": "^3.1.1",
     "next": "12.1.4",
+    "rc-drawer": "^4.4.3",
     "react": "18.0.0",
     "react-dnd": "^14.0.5",
     "react-dnd-html5-backend": "^14.1.0",
     "react-dom": "18.0.0",
     "react-dropzone": "^12.0.4",
     "react-icons": "^4.3.1",
+    "react-modal": "^3.14.4",
+    "react-modern-drawer": "^1.1.1",
     "react-uid": "^2.3.1"
   },
   "devDependencies": {
