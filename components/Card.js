@@ -46,7 +46,7 @@ export const Card = ({ id, text, index, moveCard, dispatch, state, changeLayer }
 
     const opacity = isDragging ? 0 : 1;
     drag(drop(ref));
-    return (<div ref={ref} onClick={()=>dispatch({type:"SELECT_LAYER",payload:id})} className={`text-md ${ state.selectedLayer===id? "border border-white" : "" } my-5 px-2 py-5 text-center cursor-pointer rounded bg-gradient-to-r from-[#1F2628] to-[#313538] text-white ${opacity?"opacity-100":"opacity-0"}`} data-handler-id={handlerId}>
+    return (<div ref={ref} onClick={()=>dispatch({type:"SELECT_LAYER",payload:id})} className={`text-md ${ state.selectedLayer===id? "border border-[#cbd5e1]" : "" } my-5 px-2 py-5 text-center cursor-pointer rounded bg-[#202B3B] text-white ${opacity?"opacity-100":"opacity-0"}`} data-handler-id={handlerId}>
 			{text}
 		</div>);
 };
