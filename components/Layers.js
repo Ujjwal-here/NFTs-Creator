@@ -5,6 +5,7 @@ import { layerReducer, initialAppState } from "../reducers/layerReducer";
 import Dexie from "dexie";
 import { generateUID } from "../utils/generateUid";
 import Image from "next/image";
+import mergeImages from 'merge-images';
 
 const Layers = () => {
   const db = new Dexie("Files");
@@ -81,6 +82,30 @@ const Layers = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
+  const [previewImg , setPreviewImg] = useState("")
+
+
+  function generatePreview(){
+    
+    const appState = JSON.parse(localStorage.getItem("appState"))
+    console.log("appState",appState)
+    let imagePathList = []
+
+
+    appState.edges.forEach(edge => {
+
+        const id = edge.id
+        const node = appState.nodes.find(item => item.id === id)
+        const randomImgPath = node.files[Math.floor(Math.random()*node.files.length)]
+        imagePathList.push(randomImgPath.imgUrl)
+        
+    });
+
+    mergeImages(imagePathList).then(b64 =>  setPreviewImg(b64))
+    
+
+}
+
   console.log(
     appState.nodes.find((item) => item.id === appState.selectedLayer)
   );
@@ -151,7 +176,7 @@ const Layers = () => {
         </div>
       </div>
       <div className="flex flex-row px-36">
-      <div className="text-md my-5 mr-2 px-2 py-5 grow text-center cursor-pointer rounded bg-[#202B3B] text-white ">
+      <div onClick={generatePreview} className="text-md my-5 mr-2 px-2 py-5 grow text-center cursor-pointer rounded bg-[#202B3B] text-white ">
           Preview
         </div>
         <div className="text-md my-5 mx-2 px-2 py-5 grow text-center cursor-pointer rounded bg-[#202B3B] text-white ">
@@ -162,6 +187,16 @@ const Layers = () => {
         </div>
       
       </div>
+      {
+      previewImg != "" ?
+      <Image
+                      alt=""
+                      src={previewImg}
+                      width={200}
+                      height={200}
+                    ></Image>:
+                    <div></div>
+      }
     </div>
   );
 };
