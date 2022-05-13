@@ -10,24 +10,24 @@ const Footer = () => {
         <p className="text-white font-bold text-2xl mb-8">NFTs logo</p>
         <div className="flex flex-row items-center my-4">
           <IoMdMail className="text-white mr-2" />
-          <p className="text-[#94a3b8] font-thin cursor-pointer">nftscreator@gmail.com</p>
+          <p className="text-[#94a3b8] font-normal cursor-pointer">nftscreator@gmail.com</p>
         </div>
         <div className="flex flex-row items-center mb-8">
           <IoMdMail className="text-white mr-2" />
-          <p className="text-[#94a3b8] font-thin cursor-pointer">nftscreator@gmail.com</p>
+          <p className="text-[#94a3b8] font-normal cursor-pointer">nftscreator@gmail.com</p>
         </div>
       </div>
       <div className="">
         <p className="text-white font-bold text-md mb-4">Company</p>
-        <p className="text-[#94a3b8] font-thin cursor-pointer my-2">About Us</p>
-        <p className="text-[#94a3b8] font-thin cursor-pointer my-2">Careers</p>
-        <p className="text-[#94a3b8] font-thin cursor-pointer my-2">Contact Us</p>
+        <p className="text-[#94a3b8] font-normal cursor-pointer my-2">About Us</p>
+        <p className="text-[#94a3b8] font-normal cursor-pointer my-2">Careers</p>
+        <p className="text-[#94a3b8] font-normal cursor-pointer my-2">Contact Us</p>
       </div>
 
       <div className="">
         <p className="text-white font-bold text-md mb-4">Futher Information</p>
-        <p className="text-[#94a3b8] cursor-pointer font-thin my-2">Terms and Conditions</p>
-        <p className="text-[#94a3b8] cursor-pointer font-thin my-2">Privacy Policy</p>
+        <p className="text-[#94a3b8] cursor-pointer font-normal my-2">Terms and Conditions</p>
+        <p className="text-[#94a3b8] cursor-pointer font-normal my-2">Privacy Policy</p>
       </div>
       <div className="">
         <p className="text-white font-bold text-md mb-4">Follow Us</p>
