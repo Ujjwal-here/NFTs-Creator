@@ -6,6 +6,10 @@ export let initialAppState = {
     selectedLayer: null
 }
 
+function saveToLocalStorage(state){
+    localStorage.setItem('appState', JSON.stringify(state));
+}
+
 export function layerReducer(state,action){
     switch (action.type) {
 
@@ -20,6 +24,8 @@ export function layerReducer(state,action){
                 }
                 
               })
+            
+            saveToLocalStorage(newState)
               
             return newState
         }
@@ -38,13 +44,16 @@ export function layerReducer(state,action){
                     $set: state.edges.length + 1
                 }
               })
-              
+            
+            saveToLocalStorage(newState)
             return newState
         }
 
         case 'SELECT_LAYER':{
 
-            return {...state, selectedLayer:action.payload}
+            const newState = {...state, selectedLayer:action.payload}
+            saveToLocalStorage(newState)
+            return newState
         }
 
         case 'ADD_FILES':{
@@ -53,13 +62,14 @@ export function layerReducer(state,action){
 
             const newNodes = state.nodes.filter(item=> item.id != action.payload.selectedLayer)
 
-            return {edges:state.edges,nodes:[...newNodes,find],selectedLayer:state.selectedLayer}
+            const newState =  {edges:state.edges,nodes:[...newNodes,find],selectedLayer:state.selectedLayer}
+            saveToLocalStorage(newState)
+            return newState
 
         }
         
         default:
             return state
-        
         
     }
 }
