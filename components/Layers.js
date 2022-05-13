@@ -5,7 +5,7 @@ import { layerReducer, initialAppState } from "../reducers/layerReducer";
 import Dexie from "dexie";
 import { generateUID } from "../utils/generateUid";
 import Image from "next/image";
-import mergeImages from 'merge-images';
+import mergeImages from "merge-images";
 
 const Layers = () => {
   const db = new Dexie("Files");
@@ -15,10 +15,10 @@ const Layers = () => {
 
   const [appState, dispatch] = useReducer(layerReducer, initialAppState);
 
-  const [isOpen, setIsOpen] = React.useState(false)
+  const [isOpen, setIsOpen] = React.useState(false);
   const toggleDrawerProp = () => {
-      setIsOpen((prevState) => !prevState)
-  }
+    setIsOpen((prevState) => !prevState);
+  };
 
   const moveCard = useCallback((dragIndex, hoverIndex) => {
     dispatch({
@@ -82,29 +82,23 @@ const Layers = () => {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
-  const [previewImg , setPreviewImg] = useState("")
+  const [previewImg, setPreviewImg] = useState("");
 
+  function generatePreview() {
+    const appState = JSON.parse(localStorage.getItem("appState"));
+    console.log("appState", appState);
+    let imagePathList = [];
 
-  function generatePreview(){
-    
-    const appState = JSON.parse(localStorage.getItem("appState"))
-    console.log("appState",appState)
-    let imagePathList = []
-
-
-    appState.edges.forEach(edge => {
-
-        const id = edge.id
-        const node = appState.nodes.find(item => item.id === id)
-        const randomImgPath = node.files[Math.floor(Math.random()*node.files.length)]
-        imagePathList.push(randomImgPath.imgUrl)
-        
+    appState.edges.forEach((edge) => {
+      const id = edge.id;
+      const node = appState.nodes.find((item) => item.id === id);
+      const randomImgPath =
+        node.files[Math.floor(Math.random() * node.files.length)];
+      imagePathList.push(randomImgPath.imgUrl);
     });
 
-    mergeImages(imagePathList).then(b64 =>  setPreviewImg(b64))
-    
-
-}
+    mergeImages(imagePathList).then((b64) => setPreviewImg(b64));
+  }
 
   console.log(
     appState.nodes.find((item) => item.id === appState.selectedLayer)
@@ -176,27 +170,29 @@ const Layers = () => {
         </div>
       </div>
       <div className="flex flex-row px-36">
-      <div onClick={generatePreview} className="text-md my-5 mr-2 px-2 py-5 grow text-center cursor-pointer rounded bg-[#202B3B] text-white ">
+        <div
+          onClick={generatePreview}
+          className="text-md my-5 mr-2 px-2 py-5 grow text-center cursor-pointer rounded bg-[#202B3B] text-white "
+        >
           Preview
         </div>
         <div className="text-md my-5 mx-2 px-2 py-5 grow text-center cursor-pointer rounded bg-[#202B3B] text-white ">
           Generate Collection
         </div>
-        <div onClick={toggleDrawerProp} className="text-md my-5 mx-2 px-2 py-5 grow text-center cursor-pointer rounded bg-[#202B3B] text-white ">
+        <div
+          onClick={toggleDrawerProp}
+          className="text-md my-5 mx-2 px-2 py-5 grow text-center cursor-pointer rounded bg-[#202B3B] text-white "
+        >
           More
         </div>
-      
       </div>
-      {
-      previewImg != "" ?
-      <Image
-                      alt=""
-                      src={previewImg}
-                      width={200}
-                      height={200}
-                    ></Image>:
-                    <div></div>
-      }
+      {previewImg != "" ? (
+        <div className="px-36 py-10">
+          <Image alt="" src={previewImg} width={200} height={200}></Image>
+        </div>
+      ) : (
+        <div></div>
+      )}
     </div>
   );
 };
