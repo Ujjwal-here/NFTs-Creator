@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useReducer } from "react";
-import { Card } from "./Card";
+import { Card } from "../components/Card";
 import { useDropzone } from "react-dropzone";
 import { layerReducer, initialAppState } from "../reducers/layerReducer";
 import Dexie from "dexie";
@@ -34,7 +34,7 @@ const Layers = () => {
     }
   }, []);
 
-  const renderCard = useCallback(
+  const renderCards = useCallback(
     (card, index) => {
       return (
         <Card
@@ -117,7 +117,7 @@ const Layers = () => {
             Layers
           </div>
           <div className="w-80">
-            {appState.edges.map((card, i) => renderCard(card, i))}
+            {appState.edges.map((card, i) => renderCards(card, i))}
           </div>
           <div
             className="text-md my-5 px-2 py-5 text-center cursor-pointer rounded bg-[#202B3B] text-white "
